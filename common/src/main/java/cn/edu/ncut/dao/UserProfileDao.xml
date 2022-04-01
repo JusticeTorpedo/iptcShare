@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.ncut.dao.UserProfileDao">
+    <select id="selectProfileByUserName" resultType="cn.edu.ncut.domain.UserProfile">
+        select * from user_profile where user_name = #{userName}
+    </select>
+    <insert id="insertUserNameIntoProfile">
+        insert into user_profile(user_name) values(#{userName})
+    </insert>
+    <update id="updateAvatarIntoProfile">
+        update user_profile set user_avatar=#{avatarPath} where user_name=#{userName}
+    </update>
+    <update id="updateProfile">
+        update user_profile
+        set
+        user_name=#{userName}
+            <if test="userRealName != null and userRealName != ''">
+                ,user_real_name=#{userRealName}
+            </if>
+            <if test="userGender != null and userGender !=''">
+                ,user_gender=#{userGender}
+            </if>
+            <if test="userUniversity != null and userUniversity !=''">
+                ,user_university=#{userUniversity}
+            </if>
+            <if test="userTitle != null and userTitle !=''">
+                ,user_title=#{userTitle}
+            </if>
+            <if test="userSignature != null and userSignature !=''">
+                ,user_signature=#{userSignature}
+            </if>
+        where
+        user_name=#{userName}
+    </update>
+
+</mapper>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.ncut.dao.ArticleDao">
+
+    <!--============================== article表 ==============================-->
+
+    <insert id="insertArticle">
+        insert into
+            article(
+            article_user_name,
+            article_category_first,
+            article_category_second,
+            article_title,
+            article_content,
+            article_create_time,
+            article_update_time,
+            article_is_available,
+            article_allow_comment,
+            article_visit_count,
+            article_like_count,
+            article_comment_count
+        )
+        values
+        (
+            #{articleUserName},
+            #{articleCategoryFirst},
+            #{articleCategorySecond},
+            #{articleTitle},
+            #{articleContent},
+            #{articleCreateTime},
+            #{articleUpdateTime},
+            #{articleIsAvailable},
+            #{articleAllowComment},
+            #{articleVisitCount},
+            #{articleLikeCount},
+            #{articleCommentCount}
+        )
+    </insert>
+
+    <select id="selectAllArticle" resultType="cn.edu.ncut.domain.Article">
+        select * from article order by article_update_time desc
+    </select>
+
+    <select id="selectArticleByUserName" resultType="cn.edu.ncut.domain.Article">
+        select * from article where article_user_name = #{userName} order by article_update_time desc
+    </select>
+
+    <select id="selectArticleByArticleId" resultType="cn.edu.ncut.domain.Article">
+        select * from article where article_id = #{articleId}
+    </select>
+
+    <update id="updateVisitCount">
+        update article set article_visit_count=article_visit_count+1 where article_id=#{articleId}
+    </update>
+
+    <update id="updateLikeCount">
+        update article set article_like_count=#{likeCount} where article_id=#{articleId}
+    </update>
+
+    <update id="updateCommentCount">
+        update article set article_comment_count=#{commentCount} where article_id=#{articleId}
+    </update>
+
+    <select id="selectArticleWithCatSecond" resultType="cn.edu.ncut.domain.Article">
+        select * from article where article_category_second like concat('%',#{keyword},'%') order by article_update_time desc;
+    </select>
+
+    <select id="selectArticleWithTitle" resultType="cn.edu.ncut.domain.Article">
+        select * from article where article_title like concat('%',#{keyword},'%') order by article_update_time desc;
+    </select>
+
+    <select id="selectArticleWithContent" resultType="cn.edu.ncut.domain.Article">
+        select * from article where article_content like concat('%',#{keyword},'%') order by article_update_time desc;
+    </select>
+
+    <!--============================== article_like表 ==============================-->
+
+    <insert id="insertArticleLike">
+        insert into article_like
+        (article_id, user_id, create_time)
+        values
+        (#{articleId}, #{userId}, #{createTime})
+    </insert>
+
+    <delete id="deleteArticleLike">
+        delete from article_like where id=#{id}
+    </delete>
+
+    <select id="selectLikeByArticleId" resultType="cn.edu.ncut.domain.ArticleLike">
+        select * from article_like where article_id=#{articleId}
+    </select>
+
+    <select id="selectLikeByUserId" resultType="cn.edu.ncut.domain.ArticleLike">
+        select * from article_like where user_id=#{userId}
+    </select>
+
+    <select id="selectLikeByArticleIdAndUserId" resultType="cn.edu.ncut.domain.ArticleLike">
+        select * from article_like where article_id=#{articleId} and user_id=#{userId}
+    </select>
+
+    <!--============================== article_comment表 ==============================-->
+
+    <insert id="insertArticleComment">
+        insert into article_comment
+        (article_id, user_id, user_name, content, create_time)
+        values
+        (#{articleId}, #{userId}, #{userName}, #{content}, #{createTime});
+    </insert>
+
+    <select id="selectCommentByArticleId" resultType="cn.edu.ncut.domain.ArticleComment">
+        select * from article_comment where article_id=#{articleId} order by create_time desc
+    </select>
+
+    <select id="selectCommentByUserId" resultType="cn.edu.ncut.domain.ArticleComment">
+        select * from article_comment where user_id=#{userId} order by create_time desc
+    </select>
+
+
+</mapper>

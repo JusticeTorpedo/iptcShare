@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.ncut.dao.SubjectCat1stDao">
+    <select id="selectAll" resultType="cn.edu.ncut.domain.SubjectCat1st">
+        select * from subject_category_first order by id
+    </select>
+    <select id="selectNameById" resultType="java.lang.String">
+        select name from subject_category_first where id=#{id}
+    </select>
+
+</mapper>

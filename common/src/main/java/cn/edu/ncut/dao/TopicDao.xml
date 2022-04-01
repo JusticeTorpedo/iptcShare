@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.ncut.dao.TopicDao">
+
+    <!--============================== topic表 ==============================-->
+
+    <insert id="insertTopic">
+        insert into
+        topic(
+            user_name,
+            title,
+            content,
+            is_available,
+            visit_count,
+            like_count,
+            answer_count,
+            create_time
+        )
+        values
+        (
+            #{userName},
+            #{title},
+            #{content},
+            #{isAvailable},
+            #{visitCount},
+            #{likeCount},
+            #{answerCount},
+            #{createTime}
+        );
+    </insert>
+
+    <select id="selectTopicAll" resultType="cn.edu.ncut.domain.Topic">
+        select * from topic order by create_time desc;
+    </select>
+
+    <select id="selectTopicById" resultType="cn.edu.ncut.domain.Topic">
+        select * from topic where id=#{id};
+    </select>
+
+    <select id="selectTopicByUserName" resultType="cn.edu.ncut.domain.Topic">
+        select * from topic where user_name=#{userName} order by create_time desc;
+    </select>
+
+    <update id="updateVisitCount">
+        update topic set visit_count=visit_count+1 where id=#{id};
+    </update>
+
+    <update id="updateLikeCount">
+        update topic set like_count=#{likeCount} where id=#{id};
+    </update>
+
+    <update id="updateAnswerCount">
+        update topic set answer_count=#{answerCount} where id=#{id};
+    </update>
+
+    <select id="selectTopicWithTitle" resultType="cn.edu.ncut.domain.Topic">
+        select * from topic where title like concat('%',#{keyword},'%') order by create_time desc;
+    </select>
+
+    <select id="selectTopicWithContent" resultType="cn.edu.ncut.domain.Topic">
+        select * from topic where content like concat('%',#{keyword},'%') order by create_time desc;
+    </select>
+
+    <!--============================== topic_like表 ==============================-->
+
+    <insert id="insertTopicLike">
+        insert into topic_like(topic_id, user_name, create_time)
+        values (#{topicId}, #{userName}, #{createTime});
+    </insert>
+
+    <delete id="deleteTopicLike">
+        delete from topic_like where id=#{id};
+    </delete>
+
+    <select id="selectTopicLikeByTopicId" resultType="cn.edu.ncut.domain.TopicLike">
+        select * from topic_like where topic_id=#{topicId};
+    </select>
+
+    <select id="selectTopicLikeByUserName" resultType="cn.edu.ncut.domain.TopicLike">
+        select * from topic_like where user_name=#{userName} order by create_time desc;
+    </select>
+
+    <select id="selectTopicLikeByTopicAndUser" resultType="cn.edu.ncut.domain.TopicLike">
+        select * from topic_like where user_name=#{userName} and topic_id=#{topicId};
+    </select>
+
+    <!--============================== topic_answer表 ==============================-->
+
+    <insert id="insertTopicAnswer">
+        insert into topic_answer
+        (
+            topic_id,
+            user_name,
+            content,
+            is_available,
+            like_count,
+            comment_count,
+            create_time
+        )
+        values
+        (
+            #{topicId},
+            #{userName},
+            #{content},
+            #{isAvailable},
+            #{likeCount},
+            #{commentCount},
+            #{createTime}
+        );
+    </insert>
+
+    <select id="selectAnswerById" resultType="cn.edu.ncut.domain.TopicAnswer">
+        select * from topic_answer where id=#{id};
+    </select>
+
+    <select id="selectAnswerByTopicId" resultType="cn.edu.ncut.domain.TopicAnswer">
+        select * from topic_answer where topic_id=#{topicId} order by create_time desc;
+    </select>
+
+    <select id="selectAnswerByUserName" resultType="cn.edu.ncut.domain.TopicAnswer">
+        select * from topic_answer where user_name=#{userName} order by create_time desc;
+    </select>
+
+    <update id="updateAnswerLikeCount">
+        update topic_answer set like_count=#{likeCount} where id=#{id};
+    </update>
+
+    <update id="updateCommentCount">
+        update topic_answer set comment_count=#{commentCount} where id=#{id};
+    </update>
+
+    <select id="selectAnswerWithContent" resultType="cn.edu.ncut.domain.TopicAnswer">
+        select * from topic_answer where content like concat('%',#{keyword},'%') order by create_time desc;
+    </select>
+
+    <!--============================== answer_like表 ==============================-->
+
+    <insert id="insertAnswerLike">
+        insert into answer_like(answer_id, user_name, create_time)
+        values (#{answerId}, #{userName}, #{createTime});
+    </insert>
+
+    <delete id="deleteAnswerLike">
+        delete from answer_like where id=#{id};
+    </delete>
+
+    <select id="selectAnswerLikeByAnswerId" resultType="cn.edu.ncut.domain.AnswerLike">
+        select * from answer_like where answer_id=#{answerId};
+    </select>
+
+    <select id="selectAnswerLikeByUserName" resultType="cn.edu.ncut.domain.AnswerLike">
+        select * from answer_like where user_name=#{userName} order by create_time desc;
+    </select>
+
+    <select id="selectAnswerLikeByAnswerAndUser" resultType="cn.edu.ncut.domain.AnswerLike">
+        select * from answer_like where user_name=#{userName} and answer_id=#{answerId};
+    </select>
+
+    <!--============================== answer_comment表 ==============================-->
+
+    <insert id="insertAnswerComment">
+        insert into answer_comment(answer_id, user_name, content, like_count, create_time)
+        values (#{answerId}, #{userName}, #{content}, #{likeCount}, #{createTime});
+    </insert>
+
+    <select id="selectCommentByAnswerId" resultType="cn.edu.ncut.domain.AnswerComment">
+        select * from answer_comment where answer_id=#{answerId} order by create_time desc;
+    </select>
+
+    <select id="selectCommentByUserName" resultType="cn.edu.ncut.domain.AnswerComment">
+        select * from answer_comment where user_name=#{userName} order by create_time desc;
+    </select>
+
+    <update id="updateCommentLikeCount">
+        update answer_comment set like_count=#{likeCount} where id=#{id};
+    </update>
+
+    <!--============================== answer_comment_like表 ==============================-->
+
+    <insert id="insertAnswerCommentLike">
+        insert into answer_comment_like(comment_id, user_name, create_time)
+        values (#{commentId}, #{userName}, #{createTime});
+    </insert>
+
+    <delete id="deleteAnswerCommentLike">
+        delete from answer_comment_like where id=#{id};
+    </delete>
+
+    <select id="selectAnswerCommentLikeByCommentId" resultType="cn.edu.ncut.domain.AnswerCommentLike">
+        select * from answer_comment_like where comment_id=#{commentId};
+    </select>
+
+    <select id="selectAnswerCommentLikeByUserName" resultType="cn.edu.ncut.domain.AnswerCommentLike">
+        select * from answer_comment_like where user_name=#{userName} order by create_time desc;
+    </select>
+
+    <select id="selectAnswerCommentLikeByCommentAndUser" resultType="cn.edu.ncut.domain.AnswerCommentLike">
+        select * from answer_comment_like where comment_id=#{commentId} and user_name=#{userName};
+    </select>
+
+</mapper>

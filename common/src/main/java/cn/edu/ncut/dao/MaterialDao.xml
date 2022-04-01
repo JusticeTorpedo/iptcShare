@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.ncut.dao.MaterialDao">
+
+    <!--============================== article表 ==============================-->
+
+    <select id="selectAllMaterial" resultType="cn.edu.ncut.domain.Material">
+        select * from material order by update_time desc
+    </select>
+
+    <select id="selectMaterialByUserName" resultType="cn.edu.ncut.domain.Material">
+        select * from material where user_name = #{userName}
+    </select>
+
+    <select id="selectMaterialByMaterialId" resultType="cn.edu.ncut.domain.Material">
+        select * from material where id = #{materialId}
+    </select>
+
+    <insert id="insertMaterial">
+        insert into
+            material(
+            user_name,
+            category_first,
+            category_second,
+            title,
+            content,
+            create_time,
+            update_time,
+            is_available,
+            visit_count,
+            like_count
+        )
+        values
+        (
+            #{userName},
+            #{categoryFirst},
+            #{categorySecond},
+            #{title},
+            #{content},
+            #{createTime},
+            #{updateTime},
+            #{isAvailable},
+            #{visitCount},
+            #{likeCount}
+        )
+    </insert>
+
+    <update id="updateVisitCount">
+        update material set visit_count=visit_count+1 where id=#{materialId}
+    </update>
+
+    <update id="updateLikeCount">
+        update material set like_count=#{likeCount} where id=#{materialId}
+    </update>
+
+    <select id="selectMaterialWithCatSecond" resultType="cn.edu.ncut.domain.Material">
+        select * from material where category_second like concat('%',#{keyword},'%') order by update_time desc;
+    </select>
+
+    <select id="selectMaterialWithTitle" resultType="cn.edu.ncut.domain.Material">
+        select * from material where title like concat('%',#{keyword},'%') order by update_time desc;
+    </select>
+
+    <select id="selectMaterialWithContent" resultType="cn.edu.ncut.domain.Material">
+        select * from material where content like concat('%',#{keyword},'%') order by update_time desc;
+    </select>
+
+    <!--============================== article_like表 ==============================-->
+
+    <insert id="insertMaterialLike">
+        insert into material_like
+            (material_id, user_id, create_time)
+        values
+            (#{materialId}, #{userId}, #{createTime})
+    </insert>
+
+    <delete id="deleteMaterialLike">
+        delete from material_like where id=#{id}
+    </delete>
+
+    <select id="selectLikeByMaterialId" resultType="cn.edu.ncut.domain.MaterialLike">
+        select * from material_like where material_id=#{materialId}
+    </select>
+
+    <select id="selectLikeByUserId" resultType="cn.edu.ncut.domain.MaterialLike">
+        select * from material_like where user_id=#{userId}
+    </select>
+
+    <select id="selectLikeByMaterialIdAndUserId" resultType="cn.edu.ncut.domain.MaterialLike">
+        select * from material_like where material_id=#{materialId} and user_id=#{userId}
+    </select>
+
+</mapper>

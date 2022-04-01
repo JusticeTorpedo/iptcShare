@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+
+        <!--
+            开启自动驼峰命名规则映射，
+            即从经典数据库列名 A_COLUMN 到经典Java属性名 aColumn 的类似映射。
+        -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+    
+    <typeAliases>
+        <package name="cn.edu.ncut.domain"/>
+    </typeAliases>
+
+    <mappers>
+        <package name="cn.edu.ncut.dao"/>
+    </mappers>
+</configuration>
